@@ -2,8 +2,6 @@ import { Eraser, Sparkles } from "lucide-react";
 import React, { useState } from "react";
 
 const RemoveBackground = () => {
-
-
   const [input, setInput] = useState("");
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -29,8 +27,9 @@ const RemoveBackground = () => {
           required
         />
 
-        <p className="text-sm text-gray-500 font-light mt-5 mb-3">Supports JPG, PNG, and other image formats</p>
-
+        <p className="text-sm text-gray-500 font-light mt-5 mb-3">
+          Supports JPG, PNG, and other image formats
+        </p>
 
         <button className="w-full flex justify-center items-center gap-2 bg-linear-to-r from-[#226BFF] to-[#65ADFF] text-white px-4 py-2 mt6 text-sm rounded-lg cursor-pointer">
           <Eraser className="w-5" />

@@ -2,7 +2,6 @@ import { FileTextIcon, Sparkles } from "lucide-react";
 import React, { useState } from "react";
 
 const ReviewResume = () => {
-
   const [input, setInput] = useState("");
   const onSubmitHandler = async (e) => {
     e.preventDefault();
