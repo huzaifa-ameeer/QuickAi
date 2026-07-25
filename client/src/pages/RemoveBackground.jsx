@@ -20,7 +20,7 @@ const RemoveBackground = () => {
           <Sparkles className="w-10 p-2.5 h-10 rounded-lg text-white bg-black" />
           <h1 className="text-xl font-semibold">Background Removal</h1>
         </div>
-        <p className="mt-6 text-sm font-medium">Upload image</p>
+        <p className="mt-6 text-sm font-medium">Upload Image</p>
         <input
           onChange={(e) => setInput(e.target.files[0])}
           accept="image/*"
@@ -47,7 +47,7 @@ const RemoveBackground = () => {
         <div className="flex-1 flex justify-center items-center">
           <div className="text-sm flex flex-col items-center gap-5 text-gray-400">
             <Eraser className="w-9 h-9 " />
-            <p>Enter an image and click "Remove Background" to get started</p>
+            <p>Upload an image and click "Remove Background" to get started</p>
           </div>
         </div>
       </div>
