@@ -1,5 +1,5 @@
 import React from "react";
-import { useUser } from "@clerk/react";
+import { SignOutButton, useClerk, Show, useUser } from "@clerk/react";
 import { NavLink } from "react-router-dom";
 import {
   Eraser,
@@ -7,6 +7,7 @@ import {
   Hash,
   HomeIcon,
   Image,
+  LogOut,
   Scissors,
   SquarePen,
   User,
@@ -25,6 +26,7 @@ const navItems = [
 
 const Sidebar = ({ sidebar, setSidebar }) => {
   const { user } = useUser();
+  const { SignOutButton, openUserProfile, signOut  } = useClerk();
 
   return (
     <aside
@@ -54,7 +56,9 @@ const Sidebar = ({ sidebar, setSidebar }) => {
             >
               {({ isActive }) => (
                 <>
-                  <Icon className={`w-4 h-4 ${isActive ? " text-white " : ""}`} />
+                  <Icon
+                    className={`w-4 h-4 ${isActive ? " text-white " : ""}`}
+                  />
                   {label}
                 </>
               )}
@@ -70,6 +74,23 @@ const Sidebar = ({ sidebar, setSidebar }) => {
       >
         Close
       </button>
+      <div>
+        <div className="w-full border-t border-gray-200 px-7 flex items-center justify-between">
+          <div
+            onClick={openUserProfile}
+            className="flex gap-2 items-center cursor-pointer"
+          >
+            <img src={user.imageUrl} className="w-8 rounded-full" alt="" />
+            <div>
+              <h1 className="text-sm px-1 py-5 font-medium">{user.fullName}</h1>
+            </div>
+          </div>
+          <LogOut
+            onClick={() => signOut()}
+            className="w-4.5 flex  text-gray-400 ml-2 hover:text-gray-700 transition cursor-pointer"
+          />
+        </div>
+      </div>
     </aside>
   );
 };
