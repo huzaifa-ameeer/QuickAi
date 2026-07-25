@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { dummyCreationData } from "../assets/assets";
 import { Sparkle } from "lucide-react";
-import {Show} from "@clerk/react"
+import { Show } from "@clerk/react";
 import CreationItem from "../components/CreationItem";
 
 const Dashboard = () => {
@@ -32,10 +32,10 @@ const Dashboard = () => {
           <div className="text-slate-600">
             <p className="text-sm">Active Plan</p>
             <h2 className="text-xl font-semibold">
-  <Show when={{ plan: "premium" }} fallback="Free">
-    Premium
-  </Show>
-</h2>
+              <Show when={{ plan: "premium" }} fallback="Free">
+                Premium
+              </Show>
+            </h2>
           </div>
           <div className="w-10 h-10 rounded-lg bg-black flex justify-center items-center">
             <Sparkle className="w-5 text-white" />
@@ -43,14 +43,13 @@ const Dashboard = () => {
         </div>
       </div>
 
-    <div className="space-y-3">
-      <p className="mt-6 mb-4">Recent Creations</p>
+      <div className="space-y-3">
+        <p className="mt-6 mb-4">Recent Creations</p>
 
-      {
-        creations.map((item)=><CreationItem key={item.id} item={item}/>)
-      }
-    </div>
-
+        {creations.map((item) => (
+          <CreationItem key={item.id} item={item} />
+        ))}
+      </div>
     </div>
   );
 };
