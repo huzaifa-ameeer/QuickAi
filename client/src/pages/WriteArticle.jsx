@@ -3,9 +3,9 @@ import { Edit, Sparkle } from "lucide-react";
 
 const WriteArticle = () => {
   const articleLength = [
-    { length: 800, text: "Short (500-800 words" },
-    { length: 1200, text: "Medium (800-1200 words" },
-    { length: 1600, text: "Long (1200+ words" },
+    { length: 800, text: "Short (500-800 words)" },
+    { length: 1200, text: "Medium (800-1200 words)" },
+    { length: 1600, text: "Long (1200+ words)" },
   ];
 
   const [selectedLength, setSelectedLength] = useState(articleLength[0]);
@@ -62,7 +62,7 @@ const WriteArticle = () => {
         <div className="flex-1 flex justify-center items-center">
           <div className="text-sm flex flex-col items-center gap-5 text-gray-400">
             <Edit className="w-9 h-9 " />
-            <p>Enter a topic and click "Generate Article" to get started</p>
+            <p>Enter a topic and click "Generate Artile" to get started</p>
           </div>
         </div>
       </div>
