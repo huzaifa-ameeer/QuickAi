@@ -4,7 +4,7 @@ import React, { useState } from "react";
 const GenerateImages = () => {
   const imageStyle = [
     "Realistic",
-    "Ghibi style",
+    "Ghibli style",
     "Anime style",
     "Cartoon style",
     "Fantasy style",
