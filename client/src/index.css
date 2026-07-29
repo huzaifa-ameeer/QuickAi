@@ -2,8 +2,34 @@
 
 @import "tailwindcss";
 
-body{
+:root,
+html,
+body,
+#root {
+    min-height: 100%;
+}
+
+body {
     font-family: "Space Grotesk", sans-serif;
+    background: #ffffff;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 500px;
+    transform: translate(-30%, 20%);
+    border-radius: 9999px;
+    background: rgba(173, 109, 244, 0.5);
+    opacity: 0.5;
+    filter: blur(80px);
+    z-index: -1;
+    pointer-events: none;
 }
 
 @theme{
