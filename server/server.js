@@ -3,7 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import { clerkMiddleware } from "@clerk/express";
 import { auth } from "./middlewares/auth.js";
-
+import aiRouter from "./routes/aiRoutes.js";
 
 const app = express();
 
@@ -14,6 +14,8 @@ app.use(clerkMiddleware());
 app.get("/", (req, res) => {
   res.send("Server is Live !");
 });
+
+app.use("/api/ai", aiRouter)
 
 const PORT = process.env.PORT || 3000;
 

@@ -13,7 +13,7 @@ const openai = new OpenAI({
 
 
 
-export const generateArticle = async () => {
+export const generateArticle = async (req, res) => {
   try {
     const { userId } = getAuth(req);
     const { prompt, length } = req.body;
@@ -35,18 +35,18 @@ export const generateArticle = async () => {
           content: prompt,
         },
       ],
-      temperature = 0.7,
+      temperature : 0.7,
       max_tokens: length
     });
 
     const content = response.choices[0].message.content
 
-    await sql` INSERT INTO creations (user_id, prompt, content, type) VALUES (${userId}, ${prompt}, ${content}, "article") `
+    await sql` INSERT INTO creations (user_id, prompt, content, type) VALUES (${userId}, ${prompt}, ${content}, 'article') `
 
     if(plan !== "premium"){
         await clerkClient.users.updateUserMetadata(userId, {
             privateMetadata: {
-                free_usage = free_usage +1
+                free_usage : free_usage +1
             }
         })
     }
@@ -57,9 +57,9 @@ export const generateArticle = async () => {
     })
 
   } catch (error) {
-    console.log(error.message)
-    removeEventListener.json({
-        success : json,
+    console.log(error.message),
+    res.json({
+        success : false,
         message: error.message
     })
   }
