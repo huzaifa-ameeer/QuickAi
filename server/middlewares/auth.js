@@ -2,7 +2,7 @@ import { clerkClient, getAuth } from "@clerk/express";
 
 export const auth = async (req, res, next) => {
   try {
-    const { userId, has } = getAuth(req); // no await, no req.auth()
+    const { userId, has } = getAuth(req); 
 
     if (!userId) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
