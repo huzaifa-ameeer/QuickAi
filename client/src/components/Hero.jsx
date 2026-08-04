@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser, useClerk } from "@clerk/react";
 import { assets } from "../assets/assets";

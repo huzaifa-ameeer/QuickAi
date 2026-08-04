@@ -1,0 +1,17 @@
+{
+  "name": "quick-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Quick.ai - AI content creation SaaS (Express + React)",
+  "scripts": {
+    "install-all": "npm --prefix server install && npm --prefix client install",
+    "dev:server": "node init && npm --prefix server run dev",
+    "dev:client": "node init && npm --prefix client run dev",
+    "dev": "node init && concurrently -n server,client -c blue,green \"npm run dev:server\" \"npm run dev:client\"",
+    "build": "node init && npm --prefix client run build",
+    "start": "node init && npm --prefix server run start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -1,10 +1,46 @@
 import { Eraser, Sparkles } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
+import { useApi, isUpgradeError } from "../config/api";
+import ResultPanel from "../components/ResultPanel";
+import UpgradePrompt from "../components/UpgradePrompt";
 
 const RemoveBackground = () => {
-  const [input, setInput] = useState("");
+  const { request } = useApi();
+
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState("");
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+
+  const handleFileChange = (e) => {
+    const selected = e.target.files[0] || null;
+    setFile(selected);
+    if (preview) URL.revokeObjectURL(preview);
+    setPreview(selected ? URL.createObjectURL(selected) : "");
+  };
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    if (!file) return;
+    setLoading(true);
+    setError("");
+    setResult("");
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const data = await request("/ai/remove-background", {
+        method: "POST",
+        body: formData,
+      });
+      setResult(data.content);
+    } catch (err) {
+      setError(err.message);
+      if (isUpgradeError(err.message)) setUpgradeOpen(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -20,36 +56,50 @@ const RemoveBackground = () => {
         </div>
         <p className="mt-6 text-sm font-medium">Upload Image</p>
         <input
-          onChange={(e) => setInput(e.target.files[0])}
+          onChange={handleFileChange}
           accept="image/*"
           type="file"
           className="w-full p-2 px-3 mt-2 outline-none text-sm rounded-md border border-gray-300 cursor-pointer"
           required
         />
 
+        {preview && (
+          <img
+            src={preview}
+            alt="Upload preview"
+            className="mt-4 max-h-48 w-full object-contain rounded-lg border border-gray-200"
+          />
+        )}
+
         <p className="text-sm text-gray-500 font-light mt-5 mb-3">
           Supports JPG, PNG, and other image formats
         </p>
 
-        <button className="w-full flex justify-center items-center gap-2 bg-linear-to-r from-[#226BFF] to-[#65ADFF] text-white px-4 py-2 mt6 text-sm rounded-lg cursor-pointer">
+        <button
+          type="submit"
+          disabled={loading || !file}
+          className="w-full flex justify-center items-center gap-2 bg-linear-to-r from-[#226BFF] to-[#65ADFF] text-white px-4 py-2 mt-6 text-sm rounded-lg cursor-pointer disabled:opacity-60"
+        >
           <Eraser className="w-5" />
-          Remove Background
+          {loading ? "Processing..." : "Remove Background"}
         </button>
       </form>
 
       {/* right col */}
-      <div className="w-full max-w-lg p-4 bg-white rounded-lg flex flex-col border border-gray-200 min-h-96">
-        <div className="flex items-center gap-3">
-          <Eraser className="w-10 p-2.5 h-10  rounded-lg text-white bg-black  " />
-          <h1 className="text-xl font-semibold">Processed Image</h1>
-        </div>
-        <div className="flex-1 flex justify-center items-center">
-          <div className="text-sm flex flex-col items-center gap-5 text-gray-400">
-            <Eraser className="w-9 h-9 " />
-            <p>Upload an image and click "Remove Background" to get started</p>
-          </div>
-        </div>
-      </div>
+      <ResultPanel
+        icon={Eraser}
+        title="Processed Image"
+        resultType="image"
+        loading={loading}
+        error={error}
+        result={result}
+      />
+
+      <UpgradePrompt
+        open={upgradeOpen}
+        message={error}
+        onClose={() => setUpgradeOpen(false)}
+      />
     </div>
   );
 };

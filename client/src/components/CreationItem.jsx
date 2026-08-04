@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Markdown from "react-markdown";
+import { Trash2 } from "lucide-react";
 
-const CreationItem = ({ item }) => {
+const CreationItem = ({ item, onDelete }) => {
   const [expanded, setExpanded] = useState(false);
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    if (onDelete) onDelete(item.id);
+  };
 
   return (
     <div
@@ -16,13 +22,27 @@ const CreationItem = ({ item }) => {
             {item.type} - {new Date(item.created_at).toLocaleDateString()}
           </p>
         </div>
-        <button className="bg-[#EFF6FF] border border-[#BFDBFE] text-[#1E40AF] px-4 py-1 rounded-full">
-          {item.type}
-        </button>
+        <div className="flex items-center gap-2">
+          <button className="bg-[#EFF6FF] border border-[#BFDBFE] text-[#1E40AF] px-4 py-1 rounded-full">
+            {item.type}
+          </button>
+          {onDelete && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              title="Delete creation"
+              className="p-2 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-500 cursor-pointer"
+            >
+              <Trash2 className="w-4" />
+            </button>
+          )}
+        </div>
       </div>
       {expanded && (
         <div>
-          {item.type === "image" ? (
+          {item.type === "image" ||
+          item.type === "remove-background" ||
+          item.type === "remove-object" ? (
             <div>
               <img src={item.content} alt="" className="mt-3 w-full max-w-md" />
             </div>

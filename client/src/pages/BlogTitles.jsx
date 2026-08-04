@@ -1,17 +1,50 @@
-import { Edit, Hash, HashIcon, Sparkle, Sparkles } from 'lucide-react';
-import React, { useState } from 'react'
+import { Hash, HashIcon, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { useApi, isUpgradeError } from "../config/api";
+import ResultPanel from "../components/ResultPanel";
+import UpgradePrompt from "../components/UpgradePrompt";
 
 const BlogTitles = () => {
+  const blogCategories = [
+    "General",
+    "Technology",
+    "Business",
+    "Health",
+    "Lifestyle",
+    "Education",
+    "Travel",
+    "Food",
+  ];
 
-    const blogCategories = [
-      "General", "Technology", "Business", "Health", "Lifestyle", "Education", "Travel", "Food"
-    ];
-  
-    const [selectedCategory, setSelectedCategory] = useState("General");
-    const [input, setInput] = useState("");
-    const onSubmitHandler = async (e) => {
-      e.preventDefault();
-    };
+  const { request } = useApi();
+
+  const [selectedCategory, setSelectedCategory] = useState("General");
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState("");
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setResult("");
+    try {
+      const data = await request("/ai/generate-blog-title", {
+        method: "POST",
+        body: {
+          prompt: `Generate a blog title for the keyword ${input} in the category ${selectedCategory}.`,
+        },
+      });
+      setResult(data.content);
+    } catch (err) {
+      setError(err.message);
+      if (isUpgradeError(err.message)) setUpgradeOpen(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700">
@@ -39,34 +72,39 @@ const BlogTitles = () => {
             <span
               onClick={() => setSelectedCategory(item)}
               className={`text-xs px-4 py-1 bg-[#EFF6FF] border cursor-pointer rounded-full ${selectedCategory === item ? "bg-blue-50 text-blue-700" : "border-gray-300 text-gray-500"}`}
-              key={item}
+              key={index}
             >
               {item}
             </span>
           ))}
         </div>
         <br />
-        <button className="w-full flex justify-center items-center gap-2 bg-linear-to-r from-[#226BFF] to-[#65ADFF] text-white px-4 py-2 mt6 text-sm rounded-lg cursor-pointer">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full flex justify-center items-center gap-2 bg-linear-to-r from-[#226BFF] to-[#65ADFF] text-white px-4 py-2 mt-6 text-sm rounded-lg cursor-pointer disabled:opacity-60"
+        >
           <Hash className="w-5" />
-          Generate Title
+          {loading ? "Generating..." : "Generate Title"}
         </button>
       </form>
 
       {/* right col */}
-      <div className="w-full max-w-lg p-4 bg-white rounded-lg flex flex-col border border-gray-200 min-h-96">
-        <div className="flex items-center gap-3">
-          <HashIcon className="w-10 p-2.5 h-10  rounded-lg text-white bg-black  " />
-          <h1 className="text-xl font-semibold">Generated Titles</h1>
-        </div>
-        <div className="flex-1 flex justify-center items-center">
-          <div className="text-sm flex flex-col items-center gap-5 text-gray-400">
-            <Hash className="w-9 h-9 " />
-            <p>Enter a topic and click "Generate Title" to get started</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+      <ResultPanel
+        icon={HashIcon}
+        title="Generated Titles"
+        loading={loading}
+        error={error}
+        result={result}
+      />
 
-export default BlogTitles
+      <UpgradePrompt
+        open={upgradeOpen}
+        message={error}
+        onClose={() => setUpgradeOpen(false)}
+      />
+    </div>
+  );
+};
+
+export default BlogTitles;

@@ -1,4 +1,3 @@
-import React from "react";
 import { AiToolsData } from "../assets/assets.js";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/react";

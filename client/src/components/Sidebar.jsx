@@ -1,5 +1,4 @@
-import React from "react";
-import { SignOutButton, useClerk, Show, useUser } from "@clerk/react";
+import { useClerk, useUser } from "@clerk/react";
 import { NavLink } from "react-router-dom";
 import {
   Eraser,
@@ -26,7 +25,7 @@ const navItems = [
 
 const Sidebar = ({ sidebar, setSidebar }) => {
   const { user } = useUser();
-  const { SignOutButton, openUserProfile, signOut  } = useClerk();
+  const { openUserProfile, signOut } = useClerk();
 
   return (
     <aside
